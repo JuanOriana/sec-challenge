@@ -120,12 +120,18 @@ const Card = ({ cardData }) => {
         </CardData>
       </div>
       {cart.indexOf(cardData) < 0 && (
-        <ShoppingCartButton onClick={() => addItemToCart(cardData)}>
-          Anadir al carrito
+        <ShoppingCartButton
+          onClick={() => addItemToCart(cardData)}
+          data-testid="add-to-cart"
+        >
+          Añadir al carrito
         </ShoppingCartButton>
       )}
       {cart.indexOf(cardData) >= 0 && (
-        <ShoppingCartRemoveButton onClick={() => removeItemFromCart(cardData)}>
+        <ShoppingCartRemoveButton
+          onClick={() => removeItemFromCart(cardData)}
+          data-testid="remove-from-cart"
+        >
           Sacar del carrito
         </ShoppingCartRemoveButton>
       )}

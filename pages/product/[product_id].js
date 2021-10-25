@@ -144,7 +144,7 @@ const Product = () => {
       </SectionContainer>
       {cart.indexOf(product) < 0 && (
         <ShoppingCartButton onClick={() => addItemToCart(product)}>
-          Anadir al carrito
+          Añadir al carrito
         </ShoppingCartButton>
       )}
       {cart.indexOf(product) >= 0 && (

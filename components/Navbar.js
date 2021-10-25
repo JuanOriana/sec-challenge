@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useCart } from "../contexts/CartContext";
 import Link from "next/link";
@@ -72,8 +72,9 @@ const Navbar = () => {
       </Link>
       <div style={{ display: "flex", alignItems: "end" }}>
         <ShoppingCartImage src="/carrito.png" onClick={() => setOpen(!open)} />
-        <ShoppingCartSize>{cart.length}</ShoppingCartSize>
-
+        <ShoppingCartSize data-testid="cart-size">
+          {cart.length}
+        </ShoppingCartSize>
         {open && <DropdownMenu />}
       </div>
     </NavbarContainer>
