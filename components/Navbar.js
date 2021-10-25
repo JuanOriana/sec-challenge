@@ -64,6 +64,7 @@ const RemoveImage = styled.img`
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { cart } = useCart();
+
   return (
     <NavbarContainer>
       <Link href="/">
@@ -83,6 +84,11 @@ const DropdownMenu = () => {
   const [open, setOpen] = useState(false);
   const { cart, removeItemFromCart } = useCart();
   const [total, setTotal] = useState(0);
+
+  function truncate(str, n) {
+    return str.length > n ? str.substr(0, n - 1) + "..." : str;
+  }
+
   useEffect(() => {
     if (cart.length > 0) {
       setTotal(
@@ -96,14 +102,18 @@ const DropdownMenu = () => {
       setTotal(0);
     }
   }, [cart]);
+
   return (
     <DropdownContainer>
       <h4>Tu carrito</h4>
       {cart.map((cartItem, index) => (
-        <div key={index} style={{ display: "flex", alignItems: "center" }}>
+        <div
+          key={index}
+          style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+        >
           <ProductImage src={cartItem.image_url} />
           <p key={index} style={{ fontSize: "16px", margin: 0 }}>
-            {cartItem.name}
+            {truncate(cartItem.name, 20)}
           </p>
           <p style={{ margin: "0 20px" }}>${cartItem.total_price}</p>
           <RemoveImage
@@ -114,7 +124,9 @@ const DropdownMenu = () => {
         </div>
       ))}
       {cart.length == 0 && <p>¡Tu carrito esta vacio!</p>}
-      <p style={{ fontWeight: 700 }}>{total > 0 && "Total: $" + total}</p>
+      <p style={{ fontWeight: 700 }}>
+        {total > 0 && "Total: $" + Math.round(total * 100) / 100}
+      </p>
     </DropdownContainer>
   );
 };

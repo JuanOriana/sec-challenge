@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { CartProvider, useCart } from "../contexts/CartContext";
+import { useCart } from "../contexts/CartContext";
 import Link from "next/link";
 
 const CardContainer = styled.div`
@@ -24,9 +24,12 @@ const CardData = styled.div`
 `;
 
 const CardImage = styled.img`
+  color: ${(props) => props.theme.colors.brand.secondary};
   border: 3px solid ${(props) => props.theme.colors.brand.secondary};
   height: 120px;
   width: 120px;
+  min-height: 120px;
+  min-width: 120px;
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
@@ -35,9 +38,8 @@ const CardImage = styled.img`
 const CardTitle = styled.h2`
   color: ${(props) => props.theme.colors.brand.secondary};
   margin-right: 10px;
-  text-transform: uppercase;
   word-wrap: break-word;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   &:hover {
     color: #ff9999;

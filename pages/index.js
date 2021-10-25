@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import Card from "../components/Card";
 
@@ -24,73 +24,35 @@ const FilterSelect = styled.select`
   margin-left: 10px;
 `;
 
-const data = [
-  {
-    product_id: 1,
-    name: "cervezaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["vinos", "mas vendidos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 2,
-    name: "otro",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["vinos", "mas vendidos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 3,
-    name: "item 3",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["cervezas", "todos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 4,
-    name: "vino",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["cervezas", "vinos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 5,
-    name: "otro 2",
-    total_price: "600",
-    units_per_pack: 6,
-    categories: ["otros"],
-    discount_percentage: 20,
-    size: 333,
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-];
-
 export default function Home() {
-  const [filteredData, setFilteredData] = useState(data);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:7777/products")
+      .then((response) => response.json())
+      .then((foundData) => {
+        setData(foundData);
+        setFilteredData(foundData);
+      });
+
+    fetch("http://localhost:7777/categories")
+      .then((response) => response.json())
+      .then((foundData) => {
+        setCategories(foundData);
+      });
+  }, []);
 
   const filterData = (event) => {
     if (event.target.value == "todos") {
       setFilteredData(data);
     } else {
       setFilteredData(
-        data.filter((item) => item.categories.includes(event.target.value))
+        data.filter(
+          (item) =>
+            item.categories && item.categories.includes(event.target.value)
+        )
       );
     }
   };
@@ -100,9 +62,11 @@ export default function Home() {
         <p>Filtrar por</p>
         <FilterSelect onChange={filterData}>
           <option value="todos">Todos</option>
-          <option value="cervezas">Cervezas</option>
-          <option value="vinos">Vinos</option>
-          <option value="otros">Otros</option>
+          {categories.map((category, index) => (
+            <option value={category} key={index}>
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </option>
+          ))}
         </FilterSelect>
       </FilterGroup>
       <div

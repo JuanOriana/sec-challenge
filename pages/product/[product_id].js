@@ -1,64 +1,8 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import Card from "../../components/Card";
-
-const data = [
-  {
-    product_id: 1,
-    name: "cervezaaaaaaaa  aaaaaaaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["vinos", "mas vendidos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 2,
-    name: "cervezaaaaaaaa  aaaaaaaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["vinos", "mas vendidos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 3,
-    name: "cervezaaaaaaaa  aaaaaaaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["cervezas", "todos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 4,
-    name: "cervezaaaaaaaa  aaaaaaaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    discount_percentage: 20,
-    size: 333,
-    categories: ["cervezas", "vinos"],
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-  {
-    product_id: 5,
-    name: "cervezaaaaaaaa  aaaaaaaaa",
-    total_price: "600",
-    units_per_pack: 6,
-    categories: ["otros"],
-    discount_percentage: 20,
-    size: 333,
-    image_url:
-      "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223",
-  },
-];
+import { useCart } from "../../contexts/CartContext";
 
 const PageContainer = styled.div`
   display: flex;
@@ -75,6 +19,7 @@ const SectionContainer = styled.div`
 `;
 
 const MainProductImage = styled.img`
+  color: ${(props) => props.theme.colors.brand.secondary};
   border: 3px solid ${(props) => props.theme.colors.brand.secondary};
   height: 400px;
   width: 400px;
@@ -92,7 +37,6 @@ const ProductTitle = styled.h2`
   color: ${(props) => props.theme.colors.brand.secondary};
   margin-right: 10px;
   margin-bottom: 0;
-  text-transform: uppercase;
   word-wrap: break-word;
   font-size: 40px;
 `;
@@ -139,28 +83,75 @@ const ShoppingCartButton = styled.button`
   }
 `;
 
+const ShoppingCartRemoveButton = styled(ShoppingCartButton)`
+  background: #ee4444;
+  &:hover {
+    background: #ee7777;
+  }
+`;
+
 const Product = () => {
   const router = useRouter();
   const { product_id } = router.query;
+  const [product, setProduct] = useState({});
+  const [recommendations, setRecommendations] = useState([]);
+  const { cart, addItemToCart, removeItemFromCart } = useCart();
+
+  useEffect(() => {
+    fetch("http://localhost:7777/products")
+      .then((response) => response.json())
+      .then((foundProducts) => {
+        setProduct(
+          foundProducts.filter((product) => product.product_id == product_id)[0]
+        );
+
+        fetch("http://localhost:7777/recommendations?product_id=" + product_id)
+          .then((response) => response.json())
+          .then((foundData) => {
+            setRecommendations(
+              foundProducts.filter(
+                (product) =>
+                  foundData[0] &&
+                  foundData[0].recommendations.includes(product.product_id)
+              )
+            );
+          });
+      });
+  }, [product_id]);
   return (
     <PageContainer>
       <SectionContainer>
-        <MainProductImage src="https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-andes-origen-rubia-473-siempreencasa_600x600.png?v=1629814628?nocache=0.763811395909223" />
+        <MainProductImage
+          src={product ? product.image_url : ""}
+          alt={product && product.name}
+        />
         <ProductData>
           <ProductTitle>
-            HOla
-            <ProductSize>300ml</ProductSize>
+            {product && product.name}
+            <ProductSize>{product && product.size}ml</ProductSize>
           </ProductTitle>
-          <ProductDescription>aasadadasdasdasdasdsa</ProductDescription>
+          <ProductDescription>
+            {product && product.description}
+          </ProductDescription>
           <p>
-            <ProductPrice>$600</ProductPrice>
-            <ProductUnits> (6 unidades)</ProductUnits>
+            <ProductPrice>$ {product && product.total_price}</ProductPrice>
+            <ProductUnits>
+              {" "}
+              ({product && product.units_per_pack} unidades)
+            </ProductUnits>
           </p>
         </ProductData>
-        <ShoppingCartButton onClick={() => addItemToCart(cardData)}>
+      </SectionContainer>
+      {cart.indexOf(product) < 0 && (
+        <ShoppingCartButton onClick={() => addItemToCart(product)}>
           Anadir al carrito
         </ShoppingCartButton>
-      </SectionContainer>
+      )}
+      {cart.indexOf(product) >= 0 && (
+        <ShoppingCartRemoveButton onClick={() => removeItemFromCart(product)}>
+          Sacar del carrito
+        </ShoppingCartRemoveButton>
+      )}
       <SectionContainer style={{ marginTop: 40, flexDirection: "column" }}>
         <h2>Mas como esto:</h2>
         <div
@@ -170,7 +161,7 @@ const Product = () => {
             justifyContent: "center",
           }}
         >
-          {data.map((cardData, index) => (
+          {recommendations.map((cardData, index) => (
             <Card cardData={cardData} key={index} />
           ))}
         </div>
