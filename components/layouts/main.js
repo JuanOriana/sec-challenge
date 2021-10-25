@@ -2,8 +2,6 @@ import Head from "next/head";
 import Navbar from "../Navbar";
 
 const Layout = ({ children, router }) => {
-  // Usar Contexts de React puede llegar a tener mas sentido en una pagina grande que esta solucion
-  // pero la consigna pide soluciones simples
   return (
     <div>
       <Head>
