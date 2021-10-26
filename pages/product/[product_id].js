@@ -16,6 +16,9 @@ const SectionContainer = styled.div`
   align-items: center;
   width: 90%;
   padding: 10px;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;
 
 const MainProductImage = styled.img`
@@ -27,6 +30,13 @@ const MainProductImage = styled.img`
   min-width: 400px;
   border-radius: 50%;
   margin-right: 10px;
+  @media (max-width: 1000px) {
+    height: 280px;
+    width: 280px;
+    min-height: 280px;
+    min-width: 280px;
+    margin: 0;
+  }
 `;
 
 const ProductData = styled.div`
@@ -41,6 +51,12 @@ const ProductTitle = styled.h2`
   margin-bottom: 0;
   word-wrap: break-word;
   font-size: 40px;
+  @media (max-width: 1000px) {
+    width: 70vw;
+    align-self: center;
+    margin: 30px 0 0 0;
+    font-size: 30px;
+  }
 `;
 
 const ProductDescription = styled.p`
@@ -120,6 +136,7 @@ const Product = () => {
           });
       });
   }, [product_id]);
+
   return (
     <PageContainer>
       <SectionContainer>
@@ -144,12 +161,12 @@ const Product = () => {
           </p>
         </ProductData>
       </SectionContainer>
-      {!isInCart(product) && (
+      {product && !isInCart(product) && (
         <ShoppingCartButton onClick={() => addItemToCart(product)}>
           Añadir al carrito
         </ShoppingCartButton>
       )}
-      {isInCart(product) && (
+      {product && isInCart(product) && (
         <ShoppingCartRemoveButton onClick={() => removeItemFromCart(product)}>
           Sacar del carrito
         </ShoppingCartRemoveButton>

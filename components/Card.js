@@ -102,11 +102,11 @@ const Card = ({ cardData }) => {
   return (
     <CardContainer>
       <div style={{ display: "flex" }}>
-        <Link href={"/product/" + product_id}>
+        <Link href={"/product/" + product_id} passHref={true}>
           <CardImage src={image_url} alt={name} />
         </Link>
         <CardData>
-          <Link href={"/product/" + product_id}>
+          <Link href={"/product/" + product_id} passHref={true}>
             <CardTitle>
               {name}
               <CardSize>{size}ml</CardSize>

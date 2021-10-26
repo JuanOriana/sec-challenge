@@ -67,7 +67,7 @@ const Navbar = () => {
 
   return (
     <NavbarContainer>
-      <Link href="/">
+      <Link href="/" passHref={true}>
         <h1 style={{ cursor: "pointer" }}>SEC - Challenge</h1>
       </Link>
       <div style={{ display: "flex", alignItems: "end" }}>
@@ -94,11 +94,10 @@ const DropdownMenu = () => {
     if (cart.length > 0) {
       setTotal(
         cart.reduce(
-          (total, cartItem) => total + Number(cartItem.total_price),
+          (prevTotal, cartItem) => prevTotal + Number(cartItem.total_price),
           0
         )
       );
-      console.log(total);
     } else {
       setTotal(0);
     }
@@ -110,7 +109,11 @@ const DropdownMenu = () => {
       {cart.map((cartItem, index) => (
         <div
           key={index}
-          style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "10px",
+          }}
         >
           <ProductImage src={cartItem.image_url} />
           <p key={index} style={{ fontSize: "16px", margin: 0 }}>

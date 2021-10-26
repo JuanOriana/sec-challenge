@@ -12,8 +12,6 @@ export const useCart = () => {
   const [cart, setCart] = useContext(CartContext);
 
   const addItemToCart = (item) => {
-    console.log(item);
-    console.log(cart);
     if (!isInCart(item)) setCart([...cart, item]);
   };
 

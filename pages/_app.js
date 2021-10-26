@@ -1,7 +1,8 @@
-import Layout from "../components/layouts/main";
+import Layout from "../components/layouts/Main";
 import Fonts from "../components/fonts";
 import { ThemeProvider } from "@emotion/react";
 import { CartProvider } from "../contexts/CartContext";
+
 const theme = {
   colors: {
     brand: {
