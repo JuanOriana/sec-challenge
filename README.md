@@ -1,5 +1,6 @@
-## Front-end SEC - Challenge
+# Front-end SEC - Challenge
 
-# Api is expected to be loaded at localhost:7777
+Hey!
 
-# Its recomended tu run 'npm run build' before 'npm start'
+- Api is expected to be running at localhost:7777
+- It's recomended tu run 'npm run build' before 'npm start'
