@@ -23,6 +23,8 @@ const MainProductImage = styled.img`
   border: 3px solid ${(props) => props.theme.colors.brand.secondary};
   height: 400px;
   width: 400px;
+  min-height: 400px;
+  min-width: 400px;
   border-radius: 50%;
   margin-right: 10px;
 `;
@@ -95,7 +97,7 @@ const Product = () => {
   const { product_id } = router.query;
   const [product, setProduct] = useState({});
   const [recommendations, setRecommendations] = useState([]);
-  const { cart, addItemToCart, removeItemFromCart } = useCart();
+  const { cart, addItemToCart, removeItemFromCart, isInCart } = useCart();
 
   useEffect(() => {
     fetch("http://localhost:7777/products")
@@ -142,12 +144,12 @@ const Product = () => {
           </p>
         </ProductData>
       </SectionContainer>
-      {cart.indexOf(product) < 0 && (
+      {!isInCart(product) && (
         <ShoppingCartButton onClick={() => addItemToCart(product)}>
           Añadir al carrito
         </ShoppingCartButton>
       )}
-      {cart.indexOf(product) >= 0 && (
+      {isInCart(product) && (
         <ShoppingCartRemoveButton onClick={() => removeItemFromCart(product)}>
           Sacar del carrito
         </ShoppingCartRemoveButton>

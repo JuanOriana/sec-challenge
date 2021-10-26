@@ -97,7 +97,7 @@ const Card = ({ cardData }) => {
     discount_percentage,
     image_url,
   } = cardData;
-  const { cart, addItemToCart, removeItemFromCart } = useCart();
+  const { cart, addItemToCart, removeItemFromCart, isInCart } = useCart();
 
   return (
     <CardContainer>
@@ -119,7 +119,7 @@ const Card = ({ cardData }) => {
           </p>
         </CardData>
       </div>
-      {cart.indexOf(cardData) < 0 && (
+      {!isInCart(cardData) && (
         <ShoppingCartButton
           onClick={() => addItemToCart(cardData)}
           data-testid="add-to-cart"
@@ -127,7 +127,7 @@ const Card = ({ cardData }) => {
           Añadir al carrito
         </ShoppingCartButton>
       )}
-      {cart.indexOf(cardData) >= 0 && (
+      {isInCart(cardData) && (
         <ShoppingCartRemoveButton
           onClick={() => removeItemFromCart(cardData)}
           data-testid="remove-from-cart"
